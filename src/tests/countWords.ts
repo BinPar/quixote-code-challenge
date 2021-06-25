@@ -5,9 +5,18 @@ import countWords, { countWordsRecord } from '../utils/countWords';
 import getText from '../utils/getText';
 import splitText from '../utils/splitText';
 
-describe('Quijote', () => {
+describe('Count Quijote words', () => {
   let text: string;
   let words: string[];
+
+  test('Este es mi test', (): void => {
+    expect(1 + 2).toBe(3);
+  });
+
+  it('sums correctly', (): void => {
+    expect(1 + 2).toBe(3);
+  });
+
   it('Reads file', async () => {
     text = await getText();
     expect(text.length).toBeGreaterThan(100);
