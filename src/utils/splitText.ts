@@ -1,5 +1,7 @@
 const splitText = (text: string): string[] => {
-  const splittedText = text.repla;
+  const splitted = text.split(' ');
+
+  return splitted;
 };
 
 export default splitText;
