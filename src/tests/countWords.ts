@@ -1,5 +1,7 @@
+import * as path from 'path';
+import { writeFile, ensureDir } from 'fs-extra';
 import cleanText from '../utils/cleanText';
-import countWords from '../utils/countWords';
+import countWords, { countWordsRecord } from '../utils/countWords';
 import getText from '../utils/getText';
 import splitText from '../utils/splitText';
 
@@ -21,6 +23,7 @@ describe('Quijote', () => {
     expect(text.indexOf(',')).toBe(-1);
     expect(text.indexOf('ó')).toBeGreaterThan(0);
     expect(text.indexOf(' ')).toBeGreaterThan(0);
+    expect(text.indexOf('  ')).toBe(-1);
   });
 
   it('splits words', (): void => {
@@ -29,9 +32,26 @@ describe('Quijote', () => {
     expect(words.some((w) => w.length <= 0)).toBeFalsy();
   });
 
-  // it('counts words', (): void => {
-  //   const info = countWords(words);
+  it('counts words', async (): Promise<void> => {
+    console.time('Map count');
+    const info = countWords(words);
+    console.timeEnd('Map count');
 
-  //   expect(info.keys.length).toBe(words.length);
-  // });
+    console.time('Record count');
+    countWordsRecord(words);
+    console.timeEnd('Record count');
+
+    const dir = path.resolve(__dirname, '../../data/outputs');
+    await ensureDir(dir);
+
+    const filePath = path.resolve(dir, 'quijote.txt');
+
+    const finalText = info
+      .map((entry) => `${entry.word}: ${entry.count}`)
+      .join('\n');
+
+    await writeFile(filePath, finalText, { encoding: 'utf-8' });
+
+    expect(info.length).toBeGreaterThan(500);
+  });
 });

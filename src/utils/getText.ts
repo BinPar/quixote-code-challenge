@@ -6,7 +6,7 @@ const getText = async (fileName = 'text.txt'): Promise<string> => {
   const text = await readFile(filePath);
   const textString = text.toString('utf-8');
 
-  return textString.replace(/\n/g, '');
+  return textString.replace(/\n/g, ' ');
 };
 
 export default getText;
